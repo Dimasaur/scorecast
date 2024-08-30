@@ -27,8 +27,7 @@ from xgboost import XGBRegressor
 from sklearn.svm import SVR
 
 # Creating a destination path
-file_path = "/content/df_restaurants_model.csv"
-
+file_path = "../data/df_restaurants_model.csv"
 df_restaurants_model = pd.read_csv(file_path)
 
 # Step 1: Prepare the data
