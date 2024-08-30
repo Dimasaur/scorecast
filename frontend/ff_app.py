@@ -1,13 +1,18 @@
 import streamlit as st
 import requests
+import json
 
 import numpy as np
 import pandas as pd
-from food_type import food_type
-from cities_states import states, cities, state_city_dict
 
-cities_list = list(cities['city'])
-states_list = list(states['state'])
+food_type = pd.read_csv('/Users/dima/code/Dimasaur/scorecast/frontend/food_type.csv')
+
+#import state city dict
+state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.json'
+
+with open('state_city_dict.json') as json_file:
+    state_city_dict = json.load(json_file)
+
 
 with st.form("""## Tell me about the type of restaurant you open ##"""):
     # select the food type you would like to offer
@@ -39,9 +44,9 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
     submitted = st.form_submit_button("Submit your preferences")
 
 params = {
-    food_type : food_type,
-    selected_state : selected_state,
-    selected_city : selected_city
+    'food_type' : food_type,
+    'selected_state' : selected_state,
+    'selected_city' : selected_city
 }
 
 #flavour_forecast_api = "[PLACEHOLDER]"
