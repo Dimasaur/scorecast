@@ -3,7 +3,7 @@ import requests
 
 import numpy as np
 import pandas as pd
-from food_type import df_food_t20
+from food_type import food_type
 from cities_states import states, cities, state_city_dict
 
 cities_list = list(cities['city'])
@@ -15,7 +15,7 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
 
     food_type = st.selectbox(
         label = "# Restaurant type #",
-        options = df_food_t20
+        options = food_type['food_type']
     )
 
     st.markdown("""### Tell us now where you want your restaurant to be located ###""")
