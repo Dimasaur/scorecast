@@ -168,10 +168,10 @@ for model_name, config in model_configs.items():
     y_pred = best_model.predict(X_test)
     r2 = r2_score(y_test, y_pred)
 
-    Save the model to GCS
+    #Save the model to GCS
     save_model_to_gcs(best_model, model_name)
 
-    Append results to the CSV
+    #Append results to the CSV
     append_results_to_csv(model_name, r2)
 
     # Track the best model overall
