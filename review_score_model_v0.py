@@ -13,8 +13,7 @@ from google.colab import drive
 drive.mount('/content/drive')
 
 # Creating a destination path
-file_path = "/content/Pre-processing 1_restaurants_limited_features (1).csv"
-
+file_path = "/content/Pre-processing 1_restaurants_limited_features.csv"
 df_restaurants = pd.read_csv(file_path)
 
 """# 1 Cleaning dataset
