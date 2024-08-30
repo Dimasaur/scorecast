@@ -103,9 +103,11 @@ model_configs = {
         'params': {
             'alpha': [0.0001, 0.001, 0.01, 0.1],
             'penalty': ['l2', 'l1', 'elasticnet'],
-            'max_iter': [1000, 2000, 5000],
+            'max_iter': [1000, 5000, 10000],  # Increased max_iter values
             'learning_rate': ['constant', 'optimal', 'invscaling', 'adaptive'],
-            'eta0': [0.01, 0.1, 1.0]
+            'eta0': [0.001, 0.01, 0.1, 1.0],  # Adjusted eta0 values for different learning rates
+            'tol': [1e-4, 1e-3, 1e-2],  # Added tolerance for stopping criteria
+            'n_iter_no_change': [5, 10, 20]  # Early stopping after no change
         }
     },
     'KNeighborsRegressor': {
