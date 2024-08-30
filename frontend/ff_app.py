@@ -1,4 +1,5 @@
 import streamlit as st
+import requests
 
 import numpy as np
 import pandas as pd
@@ -8,41 +9,44 @@ from cities_states import states, cities, state_city_dict
 cities_list = list(cities['city'])
 states_list = list(states['state'])
 
-st.markdown("""## Tell me about the type of restaurant you open ##""")
+with st.form("""## Tell me about the type of restaurant you open ##"""):
+    # select the food type you would like to offer
+    st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
 
-# select the food type you would like to offer
-st.markdown("""## First, select the cuisine type you'd like to have in your restaurants ##""")
-
-st.selectbox(
-    label = "# Restaurant type #",
-    options = df_food_t20
-)
-
-
-# First dropdown: Select state
-selected_state = st.selectbox(
-    "Select a State:",
-    options=list(state_city_dict.keys())  # List of states from the dictionary
-)
-
-# Second dropdown: Select city based on selected state
-if selected_state:
-    # Get the list of cities for the selected state
-    cities = state_city_dict[selected_state]
-
-    # Create a dropdown for cities
-    selected_city = st.selectbox(
-        "Select a City:",
-        options=cities  # List of cities corresponding to the selected state
+    food_type = st.selectbox(
+        label = "# Restaurant type #",
+        options = df_food_t20
     )
 
-# st.selectbox(
-#     label = "# State #",
-#     options = list(states_city_dict.keys())
-# )
+    st.markdown("""### Tell us now where you want your restaurant to be located ###""")
 
-# st.selectbox(
-#     label = "# City #",
-#     options = cities_list
-# )
-# select the food type you would like to offer
+    # First dropdown: Select state
+    selected_state = st.selectbox(
+        "Select a State:",
+        options=list(state_city_dict.keys())  # List of states from the dictionary
+    )
+
+    # Second dropdown: Select city based on selected state
+    if selected_state:
+        # Get the list of cities for the selected state
+        cities = state_city_dict[selected_state]
+
+        # Create a dropdown for cities
+        selected_city = st.selectbox(
+            "Select a City:",
+            options=cities  # List of cities corresponding to the selected state
+        )
+    submitted = st.form_submit_button("Submit your preferences")
+
+params = {
+    food_type : food_type,
+    selected_state : selected_state,
+    selected_city : selected_city
+}
+
+#flavour_forecast_api = "[PLACEHOLDER]"
+
+#response = requests.get(flavour_forecast_api,params=params)
+
+#prediction = response.json()
+#predicted_score = prediction['prediction score']
