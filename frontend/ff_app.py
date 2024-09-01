@@ -5,7 +5,7 @@ import json
 import numpy as np
 import pandas as pd
 
-food_type = pd.read_csv('/Users/dima/code/Dimasaur/scorecast/frontend/food_type.csv')
+food_type = pd.read_csv('frontend/food_type.csv')
 
 #import state city dict
 state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.json'
