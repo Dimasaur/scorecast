@@ -39,26 +39,42 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
         # Create a dropdown for cities
         selected_city = st.selectbox(
             "Select a City:",
-            options=cities  # List of cities corresponding to the selected state
+            options=list(cities)  # List of cities corresponding to the selected state
         )
     submitted = st.form_submit_button("Submit your preferences")
 
-params = {
-    'food_type' : food_type,
-    'selected_state' : selected_state,
-    'selected_city' : selected_city
-}
+
+# API CONNECTIOn
+
+# flavour_forecast_api = "[PLACEHOLDER]" # add the base url here
+
+# display a welcome message from the FastAPI root endpoint
+
+# st.header("Welcome to the API connection")
+# response = requests.get(#ADD BASE URL)
+# if response.status_code == 200:
+#     st.write(response.text)
 
 
-df = pd.DataFrame(
-    [[37.76, -122.4]],
-    columns=["lat", "lon"],
-)
-st.map(df)
+# # output once the form has been submitted
+# if submitted:
 
-#flavour_forecast_api = "[PLACEHOLDER]"
+#      params = {
+#         'food_type' : food_type,
+#         'selected_state' : selected_state
+#     }
 
-#response = requests.get(flavour_forecast_api,params=params)
+#     response = requests.get(f"{BASE_URL}/predict", params=params)
+#     if response.status_code == 200:
+#         prediction = response.json()
+#         st.write(f"Prediction: {prediction['Av']}")
+#     else:
+#         st.error("Failed to fetch Flavour Forecast prediction from API.")
 
-#prediction = response.json()
-#predicted_score = prediction['prediction score']
+
+# df = pd.DataFrame(
+#     [[37.76, -122.4]],
+#     columns=["lat", "lon"],
+# )
+
+# st.map(df)
