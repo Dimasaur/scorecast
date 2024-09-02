@@ -101,7 +101,7 @@ layer = pdk.Layer(
     'ScatterplotLayer',
     data=df_map_input,
     get_position='[longitude, latitude]',
-    get_radius=20,  # Radius of the circles
+    get_radius=50,  # Radius of the circles
     get_color=[255, 0, 0, 160],  # Color of the circles (RGBA)
     pickable=True,  # Allows picking the circles to show tooltips
 )
