@@ -64,7 +64,7 @@ if submitted:
 
     if response.status_code == 200:
         prediction = response.json()
-        st.write(f"Prediction: {prediction['Av']}")
+        st.write(f"Prediction: {prediction}")
     else:
         st.error("Failed to fetch Flavour Forecast prediction from API.")
 
