@@ -91,8 +91,8 @@ def append_results_to_csv(model_name, r_squared, results_csv='model_results.csv'
     else:
         df_results = pd.DataFrame(columns=['date_trained', 'csv_filename', 'r_squared'])
 
-    new_row = {'date_trained': date_trained, 'csv_filename': csv_filename, 'r_squared': r_squared}
-    df_results = df_results.append(new_row, ignore_index=True)
+    new_row = pd.DataFrame({'date_trained': [date_trained], 'csv_filename': [csv_filename], 'r_squared': [r_squared]})
+    df_results = pd.concat([df_results, new_row], ignore_index=True)
 
     df_results.to_csv(results_csv, index=False)
     print(f"Results appended to {results_csv}")
