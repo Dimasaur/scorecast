@@ -43,14 +43,14 @@ submitted = st.button("Submit your preferences")
 
 # API CONNECTIOn
 
-# flavour_forecast_api = "[PLACEHOLDER]" # add the base url here
+flavour_forecast_api = "https://scorecast-260513249034.europe-west1.run.app/" # add the base url here
 
 # display a welcome message from the FastAPI root endpoint
 
-# st.header("Welcome to the API connection")
-# response = requests.get(#ADD BASE URL)
-# if response.status_code == 200:
-#     st.write(response.text)
+st.header("Welcome to the API connection")
+response = requests.get(flavour_forecast_api)
+if response.status_code == 200:
+    st.write(response.text)
 
 
 # # output once the form has been submitted
