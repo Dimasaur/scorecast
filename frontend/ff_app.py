@@ -86,36 +86,46 @@ df_map_input = df_sorted[["name","latitude","longitude"]].reset_index()
 del df_map_input['index']
 df_map_input = df_map_input[:10]
 
-st.pydeck_chart(
-    pdk.Deck(
-        map_style = None,
-        initial_review_state = pdk.ViewState(
-            latitude = 37.76,
-            longitude = 122.4,
-            zoom = 11,
-            pitch = 50,
-        ),
-        layers = [
-            pdk.Layer(
-                "HexagonLayer",
-                data = df_map_input,
-                get_position = ['latitude','longitude'],
-                radius = 200,
-                elevation_scale = 4,
-                elevation_angle = [0,1000],
-                pickable = True,
-                extruded = True,
-            ),
-            pdk.Layer(
-                "ScatterplotLayer",
-                data = df_map_input,
-                get_position = ['latitude','longitude'],
-                get_color = "[200, 30, 0, 160]",
-                get_radius = 200,
-            ),
-        ],
-    )
+
+
+
+# Define the initial view for the map
+initial_view = pdk.ViewState(
+    latitude=df_map_input['latitude'].mean(),
+    longitude=df_map_input['longitude'].mean(),
+    zoom=12,
+    pitch=0
 )
+
+# Define the scatterplot layer
+layer = pdk.Layer(
+    'ScatterplotLayer',
+    data=df_map_input,
+    get_position='[longitude, latitude]',
+    get_radius=200,  # Radius of the circles
+    get_color=[255, 0, 0, 160],  # Color of the circles (RGBA)
+    pickable=True,  # Allows picking the circles to show tooltips
+)
+
+# Define the tooltip to display restaurant names
+tooltip = {
+    "html": "<b>Restaurant Name:</b> {name}",
+    "style": {
+        "backgroundColor": "steelblue",
+        "color": "white"
+    }
+}
+
+# Create a Pydeck map with the defined layer and tooltip
+deck = pdk.Deck(
+    map_style='mapbox://styles/mapbox/light-v9',
+    initial_view_state=initial_view,
+    layers=[layer],
+    tooltip=tooltip
+)
+
+# Display the map in Streamlit
+st.pydeck_chart(deck)
 
 
 # st.map(data=df_map_input,
