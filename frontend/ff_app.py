@@ -87,6 +87,6 @@ df_map_input = df_map_input[:10]
 df_map_input
 
 st.map(data=df_map_input,
-       latitude=df_map_input.latitutde,
+       latitude=df_map_input.latitude,
        longitude=df_map_input.longitude,
        size=20)
