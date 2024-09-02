@@ -67,6 +67,10 @@ submitted = st.button("Submit your preferences")
 #     else:
 #         st.error("Failed to fetch Flavour Forecast prediction from API.")
 
+# search for the city's best restaurants
+
+
+
 
 # df = pd.DataFrame(
 #     [[37.76, -122.4]],
