@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import json
-
 import numpy as np
 import pandas as pd
 
@@ -13,35 +12,32 @@ state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.
 with open('frontend/state_city_dict.json') as json_file:
     state_city_dict = json.load(json_file)
 
+st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
 
-with st.form("""## Tell me about the type of restaurant you open ##"""):
-    # select the food type you would like to offer
-    st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
-
-    food_type = st.selectbox(
-        label = "# Restaurant type #",
-        options = food_type['food_type']
+food_type = st.selectbox(
+    label = "# Restaurant type #",
+    options = food_type['food_type']
     )
 
-    st.markdown("""### Tell us now where you want your restaurant to be located ###""")
+st.markdown("""### Tell us now where you want your restaurant to be located ###""")
 
-    # First dropdown: Select state
-    selected_state = st.selectbox(
-        "Select a State:",
-        options=list(state_city_dict.keys())  # List of states from the dictionary
-    )
+# First dropdown: Select state
+selected_state = st.selectbox(
+    "Select a State:",
+    options=list(state_city_dict.keys()))  # List of states from the dictionary
 
     # Second dropdown: Select city based on selected state
-    if selected_state:
-        # Get the list of cities for the selected state
-        cities = state_city_dict[selected_state]
+if selected_state:
+    # Get the list of cities for the selected state
+    cities = state_city_dict[selected_state]
 
-        # Create a dropdown for cities
-        selected_city = st.selectbox(
-            "Select a City:",
-            options=list(cities)  # List of cities corresponding to the selected state
+    # Create a dropdown for cities
+    selected_city = st.selectbox(
+        "Select a City:",
+        options=list(cities)  # List of cities corresponding to the selected state
         )
-    submitted = st.form_submit_button("Submit your preferences")
+
+submitted = st.button("Submit your preferences")
 
 
 # API CONNECTIOn
@@ -71,10 +67,23 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
 #     else:
 #         st.error("Failed to fetch Flavour Forecast prediction from API.")
 
+# search for the city's best restaurants
 
-# df = pd.DataFrame(
-#     [[37.76, -122.4]],
-#     columns=["lat", "lon"],
-# )
 
-# st.map(df)
+# GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
+df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
+
+# filter the of the same city and food type
+df_filtered = df_restaurants[
+    (df_restaurants["city"].astype(str).str.upper() == selected_city) &
+    (df_restaurants[f"food_type_one_{food_type}"] == 1)
+]
+
+# get top 10 cities
+df_sorted = df_filtered.sort_values('stars',ascending=False)
+df_map_input = df_sorted[["name","latitude","longitude"]].reset_index()
+del df_map_input['index']
+df_map_input = df_map_input[:10]
+df_map_input
+
+st.map(df_map_input)
