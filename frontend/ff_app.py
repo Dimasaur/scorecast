@@ -34,12 +34,12 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
     # Second dropdown: Select city based on selected state
     if selected_state:
         # Get the list of cities for the selected state
-        cities = list(state_city_dict[selected_state])
+        cities = state_city_dict[selected_state]
 
         # Create a dropdown for cities
         selected_city = st.selectbox(
             "Select a City:",
-            options=cities  # List of cities corresponding to the selected state
+            options=list(cities)  # List of cities corresponding to the selected state
         )
     submitted = st.form_submit_button("Submit your preferences")
 
