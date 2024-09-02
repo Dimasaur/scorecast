@@ -86,4 +86,7 @@ del df_map_input['index']
 df_map_input = df_map_input[:10]
 df_map_input
 
-st.map(df_map_input)
+st.map(data=df_map_input,
+       latitude=df_map_input.latitutde,
+       longitude=df_map_input.longitude,
+       size=20)
