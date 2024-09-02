@@ -34,7 +34,7 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
     # Second dropdown: Select city based on selected state
     if selected_state:
         # Get the list of cities for the selected state
-        cities = state_city_dict[selected_state]
+        cities = list(state_city_dict[selected_state])
 
         # Create a dropdown for cities
         selected_city = st.selectbox(
@@ -61,8 +61,7 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
 
 #      params = {
 #         'food_type' : food_type,
-#         'selected_state' : selected_state,
-#         'selected_city' : selected_city
+#         'selected_state' : selected_state
 #     }
 
 #     response = requests.get(f"{BASE_URL}/predict", params=params)
