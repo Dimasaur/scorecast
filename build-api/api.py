@@ -5,4 +5,8 @@ app = FastAPI()
 # Define a root `/` endpoint
 @app.get('/')
 def index():
-    return {'ok': True}
+    return 'Welcome to the Scorecast API!'
+
+@app.get('/predict')
+def predict():
+    return {'Av': 64}
