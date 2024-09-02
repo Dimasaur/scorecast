@@ -27,7 +27,7 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
     # First dropdown: Select state
     selected_state = st.selectbox(
         "Select a State:",
-        options=state_city_dict.keys())  # List of states from the dictionary
+        options=list(state_city_dict.keys())  # List of states from the dictionary
 
     # Second dropdown: Select city based on selected state
     if selected_state:
