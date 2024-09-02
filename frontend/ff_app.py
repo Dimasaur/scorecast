@@ -12,10 +12,7 @@ state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.
 with open('frontend/state_city_dict.json') as json_file:
     state_city_dict = json.load(json_file)
 
-
-with st.form("""## Tell me about the type of restaurant you open ##"""):
-    # select the food type you would like to offer
-    st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
+st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
 
 food_type = st.selectbox(
     label = "# Restaurant type #",
@@ -39,7 +36,8 @@ if selected_state:
         "Select a City:",
         options=list(cities)  # List of cities corresponding to the selected state
         )
-submitted = st.form_submit_button("Submit your preferences")
+
+submitted = st.button("Submit your preferences")
 
 
 # API CONNECTIOn
