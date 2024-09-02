@@ -17,29 +17,29 @@ with st.form("""## Tell me about the type of restaurant you open ##"""):
     # select the food type you would like to offer
     st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
 
-    food_type = st.selectbox(
-        label = "# Restaurant type #",
-        options = food_type['food_type']
+food_type = st.selectbox(
+    label = "# Restaurant type #",
+    options = food_type['food_type']
     )
 
-    st.markdown("""### Tell us now where you want your restaurant to be located ###""")
+st.markdown("""### Tell us now where you want your restaurant to be located ###""")
 
-    # First dropdown: Select state
-    selected_state = st.selectbox(
-            "Select a State:",
-            options=list(state_city_dict.keys()))  # List of states from the dictionary
+# First dropdown: Select state
+selected_state = st.selectbox(
+    "Select a State:",
+    options=list(state_city_dict.keys()))  # List of states from the dictionary
 
     # Second dropdown: Select city based on selected state
-    if selected_state:
-        # Get the list of cities for the selected state
-        cities = state_city_dict[selected_state]
+if selected_state:
+    # Get the list of cities for the selected state
+    cities = state_city_dict[selected_state]
 
-        # Create a dropdown for cities
-        selected_city = st.selectbox(
-            "Select a City:",
-            options=list(cities)  # List of cities corresponding to the selected state
+    # Create a dropdown for cities
+    selected_city = st.selectbox(
+        "Select a City:",
+        options=list(cities)  # List of cities corresponding to the selected state
         )
-    submitted = st.form_submit_button("Submit your preferences")
+submitted = st.form_submit_button("Submit your preferences")
 
 
 # API CONNECTIOn
