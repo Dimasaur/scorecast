@@ -67,10 +67,23 @@ submitted = st.button("Submit your preferences")
 #     else:
 #         st.error("Failed to fetch Flavour Forecast prediction from API.")
 
+# search for the city's best restaurants
 
-# df = pd.DataFrame(
-#     [[37.76, -122.4]],
-#     columns=["lat", "lon"],
-# )
 
-# st.map(df)
+# GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
+df_restaurants = pd.read_csv("/Users/dima/code/Dimasaur/scorecast/data/restaurants_ohe.csv")
+
+# filter the of the same city and food type
+df_filtered = df_restaurants[
+    (df_restaurants["city"].astype(str).str.upper() == selected_city) &
+    (df_restaurants[f"food_type_one_{food_type}"] == 1)
+]
+
+# get top 10 cities
+df_sorted = df_filtered.sort_values('stars',ascending=False)
+df_map_input = df_sorted[["name","latitude","longitude"]].reset_index()
+del df_map_input['index']
+df_map_input = df_map_input[:10]
+df_map_input
+
+st.map(df_map_input)
