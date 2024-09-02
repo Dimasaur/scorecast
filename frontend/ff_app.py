@@ -71,7 +71,7 @@ submitted = st.button("Submit your preferences")
 
 
 # GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
-df_restaurants = pd.read_csv("data/restaurants_ohe.csv")
+df_restaurants = pd.read_csv("restaurants_ohe.csv")
 
 # filter the of the same city and food type
 df_filtered = df_restaurants[
