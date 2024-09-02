@@ -51,7 +51,7 @@ params = {
 
 
 df = pd.DataFrame(
-    [37.76, -122.4],
+    [[37.76, -122.4]],
     columns=["lat", "lon"],
 )
 st.map(df)
