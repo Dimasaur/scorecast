@@ -49,6 +49,13 @@ params = {
     'selected_city' : selected_city
 }
 
+
+df = pd.DataFrame(
+    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
+    columns=["lat", "lon"],
+)
+st.map(df)
+
 #flavour_forecast_api = "[PLACEHOLDER]"
 
 #response = requests.get(flavour_forecast_api,params=params)
