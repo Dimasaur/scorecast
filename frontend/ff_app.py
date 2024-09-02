@@ -60,7 +60,7 @@ if submitted:
         'food_type' : food_type,
         'selected_state' : selected_state
     }
-    response = requests.get(f"{BASE_URL}/predict", params=params)
+    response = requests.get(f"{flavour_forecast_api}/predict", params=params)
 
     if response.status_code == 200:
         prediction = response.json()
