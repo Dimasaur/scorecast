@@ -3,6 +3,7 @@ import requests
 import json
 import numpy as np
 import pandas as pd
+import pydeck as pdk
 
 food_type = pd.read_csv('frontend/food_type.csv')
 
@@ -85,7 +86,39 @@ df_map_input = df_sorted[["name","latitude","longitude"]].reset_index()
 del df_map_input['index']
 df_map_input = df_map_input[:10]
 
-st.map(data=df_map_input,
-       latitude=df_map_input.latitude,
-       longitude=df_map_input.longitude,
-       size=100)
+st.pydeck_chart(
+    pdk.Deck(
+        map_style = None,
+        initial_review_state = pdk.ViewState(
+            latitude = 37.76,
+            longitude = 122.4,
+            zoom = 11,
+            pitch = 50,
+        ),
+        layers = [
+            pdk.Layer(
+                "HexagonLayer",
+                data = df_map_input,
+                get_position = ['latitude','longitude'],
+                radius = 200,
+                elevation_scale = 4,
+                elevation_angle = [0,1000],
+                pickable = True,
+                extruded = True,
+            ),
+            pdk.Layer(
+                "ScatterplotLayer",
+                data = df_map_input,
+                get_position = ['latitude','longitude'],
+                get_color = "[200, 30, 0, 160]"
+                get_radius = 200,
+            ),
+        ],
+    )
+)
+
+
+# st.map(data=df_map_input,
+#        latitude=df_map_input.latitude,
+#        longitude=df_map_input.longitude,
+#        size=100)
