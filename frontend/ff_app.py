@@ -53,23 +53,22 @@ if response.status_code == 200:
     st.write(response.text)
 
 
-# # output once the form has been submitted
-# if submitted:
+# output once the form has been submitted
+if submitted:
 
-#      params = {
-#         'food_type' : food_type,
-#         'selected_state' : selected_state
-#     }
+    params = {
+        'food_type' : food_type,
+        'selected_state' : selected_state
+    }
+    response = requests.get(f"{BASE_URL}/predict", params=params)
 
-#     response = requests.get(f"{BASE_URL}/predict", params=params)
-#     if response.status_code == 200:
-#         prediction = response.json()
-#         st.write(f"Prediction: {prediction['Av']}")
-#     else:
-#         st.error("Failed to fetch Flavour Forecast prediction from API.")
+    if response.status_code == 200:
+        prediction = response.json()
+        st.write(f"Prediction: {prediction['Av']}")
+    else:
+        st.error("Failed to fetch Flavour Forecast prediction from API.")
 
 # search for the city's best restaurants
-
 
 # GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
 df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
