@@ -16,7 +16,7 @@ with open('frontend/state_city_dict.json') as json_file:
 st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
 
 food_type = st.selectbox(
-    label = "# Restaurant type #",
+    label = "Restaurant type",
     options = food_type['food_type']
     )
 
@@ -101,7 +101,7 @@ layer = pdk.Layer(
     'ScatterplotLayer',
     data=df_map_input,
     get_position='[longitude, latitude]',
-    get_radius=50,  # Radius of the circles
+    get_radius=100,  # Radius of the circles
     get_color=[255, 0, 0, 160],  # Color of the circles (RGBA)
     pickable=True,  # Allows picking the circles to show tooltips
 )
