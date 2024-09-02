@@ -110,7 +110,7 @@ st.pydeck_chart(
                 "ScatterplotLayer",
                 data = df_map_input,
                 get_position = ['latitude','longitude'],
-                get_color = "[200, 30, 0, 160]"
+                get_color = "[200, 30, 0, 160]",
                 get_radius = 200,
             ),
         ],
