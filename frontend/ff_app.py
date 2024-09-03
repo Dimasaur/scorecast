@@ -200,7 +200,7 @@ state_full_abb = {
 selected_state_abbr = state_full_abb[selected_state]
 selected_state_df = restaurants_eda_df_full[restaurants_eda_df_full.state.astype(str).str.upper() == selected_state_abbr]
 
-restaurants_ohe = pd.read_csv("restaurants_ohe.csv")
+restaurants_ohe = pd.read_csv("frontend/restaurants_ohe.csv")
 
 restaurants_ohe_fil = restaurants_ohe[['business_id','food_type_one']]
 
