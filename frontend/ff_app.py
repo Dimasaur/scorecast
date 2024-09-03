@@ -5,12 +5,17 @@ import numpy as np
 import pandas as pd
 import pydeck as pdk
 
-food_type = pd.read_csv('frontend/food_type.csv')
+
+###################################################
+            # FRONTEND BASIC OPTIONS
+###################################################
+
+food_type = pd.read_csv('food_type.csv')
 
 #import state city dict
 state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.json'
 
-with open('frontend/state_city_dict.json') as json_file:
+with open('state_city_dict.json') as json_file:
     state_city_dict = json.load(json_file)
 
 st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
@@ -40,22 +45,20 @@ if selected_state:
 
 submitted = st.button("Submit your preferences")
 
-
-# API CONNECTIOn
+###################################################
+                # API CONNECTION
+###################################################
 
 flavour_forecast_api = "https://scorecast-260513249034.europe-west1.run.app/" # add the base url here
 
 # display a welcome message from the FastAPI root endpoint
-
 st.header("Welcome to the API connection")
 response = requests.get(flavour_forecast_api)
 if response.status_code == 200:
     st.write(response.text)
 
-
 # output once the form has been submitted
 if submitted:
-
     params = {
         'food_type' : food_type,
         'selected_state' : selected_state
@@ -68,10 +71,11 @@ if submitted:
     else:
         st.error("Failed to fetch Flavour Forecast prediction from API.")
 
-# search for the city's best restaurants
+###################################################
+  # GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
+###################################################
 
-# GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
-df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
+df_restaurants = pd.read_csv("restaurants_ohe.csv")
 
 # filter the of the same city and food type
 df_filtered = df_restaurants[
@@ -84,8 +88,6 @@ df_sorted = df_filtered.sort_values('stars',ascending=False)
 df_map_input = df_sorted[["name","latitude","longitude"]].reset_index()
 del df_map_input['index']
 df_map_input = df_map_input[:10]
-
-
 
 
 # Define the initial view for the map
@@ -126,8 +128,8 @@ deck = pdk.Deck(
 # Display the map in Streamlit
 st.pydeck_chart(deck)
 
+###################################################
+                # API CONNECTION
+###################################################
 
-# st.map(data=df_map_input,
-#        latitude=df_map_input.latitude,
-#        longitude=df_map_input.longitude,
-#        size=100)
+restaurants_eda_df_full = pd.read_csv("stats/restaurant_eda_df_full.csv")
