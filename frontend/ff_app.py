@@ -75,7 +75,7 @@ if submitted:
   # GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
 ###################################################
 
-df_restaurants = pd.read_csv("restaurants_ohe.csv")
+df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
 
 # filter the of the same city and food type
 df_filtered = df_restaurants[
@@ -132,7 +132,7 @@ st.pydeck_chart(deck)
 #        # TOP FEATURES OF THE LOCAL RESTAURANTS
 # ###################################################
 
-restaurants_eda_df_full = pd.read_csv("restaurant_eda_df_full.csv",low_memory=False)
+restaurants_eda_df_full = pd.read_csv("frontend/restaurant_eda_df_full.csv",low_memory=False)
 
 selected_city_df = restaurants_eda_df_full[restaurants_eda_df_full.city.astype(str).str.upper() == selected_city]
 
