@@ -154,6 +154,6 @@ int_col = selected_city_stats.select_dtypes(include="int").columns
 
 top_5_features = pd.DataFrame(selected_city_stats[int_col].sum().sort_values(ascending = False)[:5], columns = ["percent_of_places"])
 
-top_5_features = pd.DataFrame(round(top_5_features.no_places / len(selected_city_stats),2)*100)
+top_5_features = pd.DataFrame(round(top_5_features.percent_of_places / len(selected_city_stats),2)*100)
 
 st.dataframe(top_5_features)
