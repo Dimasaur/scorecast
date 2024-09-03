@@ -132,7 +132,7 @@ st.pydeck_chart(deck)
 #        # TOP FEATURES OF THE LOCAL RESTAURANTS
 # ###################################################
 
-restaurants_eda_df_full = pd.read_csv("stats/restaurant_eda_df_full.csv",low_memory=False)
+restaurants_eda_df_full = pd.read_csv("restaurant_eda_df_full.csv",low_memory=False)
 
 selected_city_df = restaurants_eda_df_full[restaurants_eda_df_full.city.astype(str).str.upper() == selected_city]
 
