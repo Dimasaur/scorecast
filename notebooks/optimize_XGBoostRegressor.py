@@ -57,27 +57,23 @@ param_grid = {
 # Initialize XGBoost Regressor
 xgb = XGBRegressor(random_state=42, eval_metric='rmse')
 
-# Initialize GridSearchCV with Early Stopping and Error Debugging
+# Initialize GridSearchCV without the early_stopping_rounds directly in the fit method
 grid_search = GridSearchCV(
     estimator=xgb,
     param_grid=param_grid,
-    scoring='r2',
+    scoring='r2',  # Use 'r2' as the scoring metric
     cv=3,
     n_jobs=-1,
-    verbose=1,
-    error_score='raise'  # Raise errors to understand what is going wrong
+    verbose=1
 )
 
 # Fit the model with early stopping
-try:
-    grid_search.fit(
-        X_train_processed, y_train,
-        eval_set=[(X_test_processed, y_test)],
-        early_stopping_rounds=10,
-        verbose=False
-    )
-except Exception as e:
-    print(f"Error during GridSearchCV: {e}")
+grid_search.fit(
+    X_train_processed, y_train,
+    eval_set=[(X_test_processed, y_test)],  # Validation set for early stopping
+    early_stopping_rounds=10,  # Stops if no improvement after 10 rounds
+    verbose=False
+)
 
 # Save the best model
 model_filename = "xgboost_best_model.joblib"
@@ -101,4 +97,3 @@ save_results_to_csv('XGBoostRegressor', r2, grid_search.best_params_)
 
 print(f"Best R-squared: {r2}")
 print(f"Best Parameters: {grid_search.best_params_}")
-
