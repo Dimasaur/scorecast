@@ -157,3 +157,62 @@ top_5_features = pd.DataFrame(selected_city_stats[int_col].sum().sort_values(asc
 top_5_features = pd.DataFrame(round(top_5_features.percent_of_places / len(selected_city_stats),2)*100)
 
 st.dataframe(top_5_features)
+
+
+# ###################################################
+#  # MOST POPULAR FOOD TYPES IN THE SELECTED STATE
+# ###################################################
+
+state_ab_full = {
+    'AB': 'ALBERTA',
+    'AZ': 'ARIZONA',
+    'CA': 'CALIFORNIA',
+    'DE': 'DELAWARE',
+    'FL': 'FLORIDA',
+    'ID': 'IDAHO',
+    'IL': 'ILLINOIS',
+    'IN': 'INDIANA',
+    'LA': 'LOUISIANA',
+    'MO': 'MISSOURI',
+    'NJ': 'NEW JERSEY',
+    'NV': 'NEVADA',
+    'PA': 'PENNSYLVANIA',
+    'TN': 'TENNESSEE'
+}
+
+state_full_abb = {
+    'ALBERTA': 'AB',
+    'ARIZONA': 'AZ',
+    'CALIFORNIA':'CA',
+    'DELAWARE':'DE',
+    'FLORIDA':'FL',
+    'IDAHO':'ID',
+    'ILLINOIS':'IL',
+    'INDIANA': 'IN',
+    'LOUISIANA':'LA',
+    'MISSOURI': 'MO',
+    'NEW JERSEY':'NJ',
+    'NEVADA': 'NV',
+    'PENNSYLVANIA':'PA',
+    'TENNESSEE':'TN'
+}
+
+selected_state_abbr = state_full_abb[selected_state]
+selected_state_df = restaurants_eda_df_full[restaurants_eda_df_full.state.astype(str).str.upper() == selected_state_abbr]
+
+restaurants_ohe = pd.read_csv("/Users/dima/code/Dimasaur/scorecast/data/restaurants_ohe.csv")
+
+restaurants_ohe_fil = restaurants_ohe[['business_id','food_type_one']]
+
+selected_state_df_full = pd.merge(selected_state_df, restaurants_ohe_fil,on=["business_id"], how="left")
+state_ranking_food_type = selected_state_df_full.groupby(selected_state_df_full.food_type_one).count()
+
+top_state_rest = pd.DataFrame(state_ranking_food_type.sort_values("business_id",ascending=False)['index'])
+
+top_state_rest['count'] = top_state_rest['index']
+del top_state_rest['index']
+top_state_rest['percentage'] = round(top_state_rest['count']/top_state_rest['count'].sum() * 100,0)
+del top_state_rest['count']
+top_state_rest = top_state_rest[:10]
+
+st.dataframe(top_state_rest)
