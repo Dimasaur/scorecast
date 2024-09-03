@@ -10,7 +10,6 @@ import joblib
 import os
 from datetime import datetime
 from xgboost import XGBRegressor
-import statsmodels.api as sm
 
 # Load and prepare the data
 file_path = "../data/df_restaurants_model.csv"
@@ -19,13 +18,13 @@ df_restaurants_model = pd.read_csv(file_path)
 # Convert boolean columns to integers
 df_restaurants_model = df_restaurants_model.astype({col: 'int' for col in df_restaurants_model.select_dtypes(include=['bool']).columns})
 
-# Feature engineering
+# Feature engineering: create interaction term
 df_restaurants_model['delivery_drive_thru'] = df_restaurants_model['delivery'] * df_restaurants_model['drive_thru']
 X = df_restaurants_model.drop(columns=['stars'])
 
 # Safely drop columns that may not exist
 columns_to_drop = ['appointment_only', 'coat_check', 'drive_thru', 'hours_weekend']
-X_reduced = sm.add_constant(X.drop(columns=[col for col in columns_to_drop if col in X.columns]))
+X_reduced = X.drop(columns=[col for col in columns_to_drop if col in X.columns])
 
 y = df_restaurants_model['stars']
 
@@ -44,14 +43,14 @@ X_test_processed = pipeline.transform(X_test)
 
 # Define the parameter grid for GridSearchCV
 param_grid = {
-    'n_estimators': [100, 200, 300],
-    'learning_rate': [0.01, 0.05, 0.1],
-    'max_depth': [3, 5, 7],
-    'subsample': [0.8, 1.0],
-    'colsample_bytree': [0.8, 1.0],
-    'gamma': [0, 0.1],
-    'reg_alpha': [0, 0.1],
-    'reg_lambda': [1, 10]
+    'n_estimators': [300],
+    'learning_rate': [0.05],
+    'max_depth': [7],
+    'subsample': [0.8],
+    'colsample_bytree': [0.8],
+    'gamma': [0.1],
+    'reg_alpha': [0],
+    'reg_lambda': [10]
 }
 
 # Initialize XGBoost Regressor
@@ -62,12 +61,12 @@ grid_search = GridSearchCV(
     estimator=xgb,
     param_grid=param_grid,
     scoring='r2',
-    cv=3,
+    cv=5,  # Increased cross-validation for better robustness
     n_jobs=-1,
     verbose=1
 )
 
-# Fit the model without early stopping
+# Fit the model
 grid_search.fit(X_train_processed, y_train)
 
 # Save the best model
@@ -78,16 +77,17 @@ joblib.dump(grid_search.best_estimator_, model_filename)
 y_pred = grid_search.best_estimator_.predict(X_test_processed)
 r2 = r2_score(y_test, y_pred)
 
-# Save results to CSV
+# Function to save results to CSV
 def save_results_to_csv(model_name, r2_score, best_params, results_csv='model_results.csv'):
     results_df = pd.DataFrame({
         'date_trained': [datetime.now().strftime('%Y-%m-%d %H:%M:%S')],
-        'csv_filename': [f"{model_name}.csv"],
+        'model_name': [model_name],
         'r2_score': [r2_score],
         'best_params': [str(best_params)]
     })
     results_df.to_csv(results_csv, mode='a', header=not os.path.exists(results_csv), index=False)
 
+# Save the results to a CSV file
 save_results_to_csv('XGBoostRegressor', r2, grid_search.best_params_)
 
 print(f"Best R-squared: {r2}")
