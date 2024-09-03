@@ -22,7 +22,11 @@ df_restaurants_model = df_restaurants_model.astype({col: 'int' for col in df_res
 # Feature engineering
 df_restaurants_model['delivery_drive_thru'] = df_restaurants_model['delivery'] * df_restaurants_model['drive_thru']
 X = df_restaurants_model.drop(columns=['stars'])
-X_reduced = sm.add_constant(X.drop(columns=['appointment_only', 'coat_check', 'drive_thru', 'hours_weekend']))
+
+# Safely drop columns that may not exist
+columns_to_drop = ['appointment_only', 'coat_check', 'drive_thru', 'hours_weekend']
+X_reduced = sm.add_constant(X.drop(columns=[col for col in columns_to_drop if col in X.columns]))
+
 y = df_restaurants_model['stars']
 
 # Split data into training and testing sets
@@ -93,3 +97,4 @@ save_results_to_csv('XGBoostRegressor', r2, grid_search.best_params_)
 
 print(f"Best R-squared: {r2}")
 print(f"Best Parameters: {grid_search.best_params_}")
+
