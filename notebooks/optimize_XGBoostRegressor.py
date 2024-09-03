@@ -67,13 +67,8 @@ grid_search = GridSearchCV(
     verbose=1
 )
 
-# Fit the model with early stopping using fit_params
-grid_search.fit(
-    X_train_processed, y_train,
-    eval_set=[(X_test_processed, y_test)],  # Validation set for early stopping
-    early_stopping_rounds=10,  # Stops if no improvement after 10 rounds
-    verbose=False
-)
+# Fit the model without early stopping
+grid_search.fit(X_train_processed, y_train)
 
 # Save the best model
 model_filename = "xgboost_best_model.joblib"
