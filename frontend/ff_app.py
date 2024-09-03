@@ -128,8 +128,32 @@ deck = pdk.Deck(
 # Display the map in Streamlit
 st.pydeck_chart(deck)
 
-###################################################
-                # API CONNECTION
-###################################################
+# ###################################################
+#        # TOP FEATURES OF THE LOCAL RESTAURANTS
+# ###################################################
 
-restaurants_eda_df_full = pd.read_csv("stats/restaurant_eda_df_full.csv")
+restaurants_eda_df_full = pd.read_csv("stats/restaurant_eda_df_full.csv",low_memory=False)
+
+selected_city_df = restaurants_eda_df_full[restaurants_eda_df_full.city.astype(str).str.upper() == selected_city]
+
+selected_city_stats = selected_city_df.drop(columns = ['Unnamed: 0.1', 'key_0', 'Unnamed: 0', 'index', 'business_id',
+       'postal_code', 'latitude', 'longitude']).reset_index().drop(columns=['index'])
+
+bool_col = selected_city_stats.select_dtypes(include="object").drop(columns=["food_type","price_range","city","state"])
+bool_col_name = bool_col.columns
+# clean up the na/nan values from the boolean columns
+
+selected_city_stats[bool_col_name] = selected_city_stats[bool_col_name].fillna(False)
+selected_city_stats[bool_col_name].isna().sum()
+
+selected_city_stats[bool_col_name] = selected_city_stats[bool_col_name].astype(int)
+selected_city_stats['alcohol'] = selected_city_stats['alcohol'].astype(int)
+
+selected_city_stats = selected_city_stats.drop(columns = ["stars","review_count","is_open"])
+int_col = selected_city_stats.select_dtypes(include="int").columns
+
+top_5_features = pd.DataFrame(selected_city_stats[int_col].sum().sort_values(ascending = False)[:5], columns = ["no_places"])
+
+top_5_features = pd.DataFrame(round(top_5_features.no_places / len(selected_city_stats),2)*100)
+
+st.dataframe(top_5_features)
