@@ -10,7 +10,7 @@ import pydeck as pdk
             # FRONTEND BASIC OPTIONS
 ###################################################
 
-food_type = pd.read_csv('food_type.csv')
+food_type = pd.read_csv('frontend/food_type.csv')
 
 #import state city dict
 state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.json'
