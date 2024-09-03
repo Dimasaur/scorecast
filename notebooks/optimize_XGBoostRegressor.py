@@ -64,7 +64,8 @@ grid_search = GridSearchCV(
     scoring='r2',
     cv=3,
     n_jobs=-1,
-    verbose=1
+    verbose=1,
+    error_score='raise'  # This will raise an error with details about why the fit failed
 )
 
 # Fit the model with early stopping
