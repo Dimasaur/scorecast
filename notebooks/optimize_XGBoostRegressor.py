@@ -6,7 +6,7 @@ from sklearn.metrics import r2_score
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-import joblib
+import pickle
 import os
 from datetime import datetime
 from xgboost import XGBRegressor
@@ -69,13 +69,24 @@ grid_search = GridSearchCV(
 # Fit the model
 grid_search.fit(X_train_processed, y_train)
 
-# Save the best model
-model_filename = "xgboost_best_model.joblib"
-joblib.dump(grid_search.best_estimator_, model_filename)
+# Save the best model using pickle
+model_filename = "xgb_reg.pkl"
+with open(model_filename, 'wb') as file:
+    pickle.dump(grid_search.best_estimator_, file)
 
-# Predict and calculate R-squared
-y_pred = grid_search.best_estimator_.predict(X_test_processed)
-r2 = r2_score(y_test, y_pred)
+# Load the model to test if it was saved correctly
+with open(model_filename, 'rb') as file:
+    xgb_model_loaded = pickle.load(file)
+
+# Test the loaded model
+y_pred_loaded = xgb_model_loaded.predict(X_test_processed)
+y_pred_original = grid_search.best_estimator_.predict(X_test_processed)
+
+# Verify that predictions match
+print("Predictions match:", all(y_pred_loaded == y_pred_original))
+
+# Calculate R-squared
+r2 = r2_score(y_test, y_pred_loaded)
 
 # Function to save results to CSV
 def save_results_to_csv(model_name, r2_score, best_params, results_csv='model_results.csv'):
@@ -92,4 +103,5 @@ save_results_to_csv('XGBoostRegressor', r2, grid_search.best_params_)
 
 print(f"Best R-squared: {r2}")
 print(f"Best Parameters: {grid_search.best_params_}")
+
 
