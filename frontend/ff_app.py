@@ -152,7 +152,7 @@ selected_city_stats['alcohol'] = selected_city_stats['alcohol'].astype(int)
 selected_city_stats = selected_city_stats.drop(columns = ["stars","review_count","is_open"])
 int_col = selected_city_stats.select_dtypes(include="int").columns
 
-top_5_features = pd.DataFrame(selected_city_stats[int_col].sum().sort_values(ascending = False)[:5], columns = ["no_places"])
+top_5_features = pd.DataFrame(selected_city_stats[int_col].sum().sort_values(ascending = False)[:5], columns = ["percent_of_places"])
 
 top_5_features = pd.DataFrame(round(top_5_features.no_places / len(selected_city_stats),2)*100)
 
