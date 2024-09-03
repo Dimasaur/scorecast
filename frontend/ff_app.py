@@ -5,12 +5,17 @@ import numpy as np
 import pandas as pd
 import pydeck as pdk
 
-food_type = pd.read_csv('frontend/food_type.csv')
+
+###################################################
+            # FRONTEND BASIC OPTIONS
+###################################################
+
+food_type = pd.read_csv('food_type.csv')
 
 #import state city dict
 state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.json'
 
-with open('frontend/state_city_dict.json') as json_file:
+with open('state_city_dict.json') as json_file:
     state_city_dict = json.load(json_file)
 
 st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
@@ -40,22 +45,20 @@ if selected_state:
 
 submitted = st.button("Submit your preferences")
 
-
-# API CONNECTIOn
+###################################################
+                # API CONNECTION
+###################################################
 
 flavour_forecast_api = "https://scorecast-260513249034.europe-west1.run.app/" # add the base url here
 
 # display a welcome message from the FastAPI root endpoint
-
 st.header("Welcome to the API connection")
 response = requests.get(flavour_forecast_api)
 if response.status_code == 200:
     st.write(response.text)
 
-
 # output once the form has been submitted
 if submitted:
-
     params = {
         'food_type' : food_type,
         'selected_state' : selected_state
@@ -68,10 +71,11 @@ if submitted:
     else:
         st.error("Failed to fetch Flavour Forecast prediction from API.")
 
-# search for the city's best restaurants
+###################################################
+  # GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
+###################################################
 
-# GETTING TOP-1O SIMILAR RESTAURANTS ON THE MAP
-df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
+df_restaurants = pd.read_csv("restaurants_ohe.csv")
 
 # filter the of the same city and food type
 df_filtered = df_restaurants[
@@ -84,8 +88,6 @@ df_sorted = df_filtered.sort_values('stars',ascending=False)
 df_map_input = df_sorted[["name","latitude","longitude"]].reset_index()
 del df_map_input['index']
 df_map_input = df_map_input[:10]
-
-
 
 
 # Define the initial view for the map
@@ -126,8 +128,32 @@ deck = pdk.Deck(
 # Display the map in Streamlit
 st.pydeck_chart(deck)
 
+# ###################################################
+#        # TOP FEATURES OF THE LOCAL RESTAURANTS
+# ###################################################
 
-# st.map(data=df_map_input,
-#        latitude=df_map_input.latitude,
-#        longitude=df_map_input.longitude,
-#        size=100)
+restaurants_eda_df_full = pd.read_csv("stats/restaurant_eda_df_full.csv",low_memory=False)
+
+selected_city_df = restaurants_eda_df_full[restaurants_eda_df_full.city.astype(str).str.upper() == selected_city]
+
+selected_city_stats = selected_city_df.drop(columns = ['Unnamed: 0.1', 'key_0', 'Unnamed: 0', 'index', 'business_id',
+       'postal_code', 'latitude', 'longitude']).reset_index().drop(columns=['index'])
+
+bool_col = selected_city_stats.select_dtypes(include="object").drop(columns=["food_type","price_range","city","state"])
+bool_col_name = bool_col.columns
+# clean up the na/nan values from the boolean columns
+
+selected_city_stats[bool_col_name] = selected_city_stats[bool_col_name].fillna(False)
+selected_city_stats[bool_col_name].isna().sum()
+
+selected_city_stats[bool_col_name] = selected_city_stats[bool_col_name].astype(int)
+selected_city_stats['alcohol'] = selected_city_stats['alcohol'].astype(int)
+
+selected_city_stats = selected_city_stats.drop(columns = ["stars","review_count","is_open"])
+int_col = selected_city_stats.select_dtypes(include="int").columns
+
+top_5_features = pd.DataFrame(selected_city_stats[int_col].sum().sort_values(ascending = False)[:5], columns = ["no_places"])
+
+top_5_features = pd.DataFrame(round(top_5_features.no_places / len(selected_city_stats),2)*100)
+
+st.dataframe(top_5_features)
