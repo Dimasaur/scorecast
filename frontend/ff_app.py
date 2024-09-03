@@ -15,7 +15,7 @@ food_type = pd.read_csv('frontend/food_type.csv')
 #import state city dict
 state_city_path = '/Users/dima/code/Dimasaur/scorecast/frontend/state_city_dict.json'
 
-with open('state_city_dict.json') as json_file:
+with open('frontend/state_city_dict.json') as json_file:
     state_city_dict = json.load(json_file)
 
 st.markdown("""### First, select the cuisine type you'd like to have in your restaurants ###""")
