@@ -6,6 +6,8 @@ import pydeck as pdk
 from PIL import Image
 import plotly.express as px
 
+food_type = pd.read_csv('frontend/food_type.csv')
+
 # Set the page layout to wide
 st.set_page_config(layout="wide")
 
@@ -534,3 +536,22 @@ if st.session_state["submitted"] and selected_city and selected_food_type:
     </a>
     """
     st.markdown(pdf_button_html, unsafe_allow_html=True)
+
+    # ###################################################
+    #  # AVG REVIEW SCORE FOR SELECTED CITY
+    # ###################################################
+
+
+# average review of by city
+
+restaurants_eda_df_full = pd.read_csv("frontend/restaurant_eda_df_full.csv", low_memory=False)
+df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
+selected_city_df = restaurants_eda_df_full[restaurants_eda_df_full.city.astype(str).str.upper() == selected_city]
+avg_review_city = round(selected_city_df.stars.mean(),2)
+
+# average review of by city + by food type
+
+avg_review_city_food = round(df_restaurants[
+                        (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
+                        (df_restaurants.food_type_one == food_type)
+                    ].stars.mean(),2)
