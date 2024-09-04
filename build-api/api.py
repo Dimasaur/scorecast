@@ -6,7 +6,7 @@ from typing import List
 
 app = FastAPI()
 
-# Load the model at startup
+# Load the model
 with open(os.path.join(os.path.dirname(__file__),  "scorecast_xgboost.pkl"), "rb") as f:
     model = pickle.load(f)
 
@@ -28,8 +28,10 @@ def predict(input_data: PredictionInput):
     # Convert input data to the format expected by the model
     features = [input_data.features]
 
-    # Make a prediction
+    # Predict
     prediction = model.predict(features)
 
     # Return the prediction as a response
-    return {'Predicted review score': prediction[0]}
+    return {
+        'predicted_review_score': float(prediction[0])
+        }
