@@ -1,6 +1,19 @@
+import pickle
+import os
 from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import List
 
 app = FastAPI()
+
+# Load the model at startup
+with open(os.path.join(os.path.dirname(__file__),  "scorecast_xgboost.pkl"), "rb") as f:
+    model = pickle.load(f)
+
+
+# Input data schema
+class PredictionInput(BaseModel):
+    features: List[float]
 
 
 # Define a root `/` endpoint
@@ -9,6 +22,14 @@ def index():
     return 'Welcome to the Scorecast API!'
 
 
-@app.get('/predict')
-def predict():
-    return {'Av': 64}
+# Endpoint to return the prediction
+@app.post('/predict')
+def predict(input_data: PredictionInput):
+    # Convert input data to the format expected by the model
+    features = [input_data.features]
+
+    # Make a prediction
+    prediction = model.predict(features)
+
+    # Return the prediction as a response
+    return {'Predicted review score': prediction[0]}
