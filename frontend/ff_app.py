@@ -551,10 +551,10 @@ avg_review_city = round(selected_city_df.stars.mean(),2)
 
 # average review of by city + by food type
 
-avg_review_city_food = round(df_restaurants[
-                        (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
-                        (df_restaurants.food_type_one == food_type)
-                    ].stars.mean(),2)
+# avg_review_city_food = round(df_restaurants[
+#                         (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
+#                         (df_restaurants.food_type_one == food_type)
+#                     ].stars.mean(),2)
 
     # ###################################################
     # TOT REST IN THE CITY AND % OF THE SELECTED FOOD TYPE
@@ -576,4 +576,5 @@ sel_cuisine_percent = round(len(sel_cuisine_rest) / len(selected_city_df) * 100,
     # ###################################################
 
 top_5_food_type = list(df_restaurants.food_type_one.value_counts()[:5].index)
-top_5_food_types_scores = df_restaurants.groupby('food_type_one')['stars'].mean().reset_index()[:5]
+top_5_food_types_scores = df_restaurants.groupby('food_type_one')['stars'].mean().reset_index()[:5].round(1)
+top_5_food_types_scores
