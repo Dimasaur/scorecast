@@ -569,7 +569,11 @@ sel_cuisine_rest = df_restaurants[
             (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
             (df_restaurants.food_type_one == selected_food_type)]
 
-sel_cuisine_percent = round(len(sel_cuisine_rest) / len(selected_city_df) * 100,2)
+if len(selected_city_df) == 0:
+    sel_cuisine_percent = 0
+else:
+    sel_cuisine_percent = round(len(sel_cuisine_rest) / len(selected_city_df) * 100,2)
+
 
     # ###################################################
     # AVG REVIEW SCORE FOR TOP-5 MOST POP FOOD TYPES
