@@ -570,3 +570,10 @@ sel_cuisine_rest = df_restaurants[
             (df_restaurants.food_type_one == food_type)]
 
 sel_cuisine_percent = round(len(sel_cuisine_rest) / len(selected_city_df) * 100,2)
+
+    # ###################################################
+    # AVG REVIEW SCORE FOR TOP-5 MOST POP FOOD TYPES
+    # ###################################################
+
+top_5_food_type = list(df_restaurants.food_type_one.value_counts()[:5].index)
+top_5_food_types_scores = df_restaurants.groupby('food_type_one')['stars'].mean().reset_index()[:5]
