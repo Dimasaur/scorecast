@@ -1,7 +1,5 @@
-fastapi
 uvicorn
-pickle
-os
 fastapi
 pydantic
-typing
+xgboost
+numpy
