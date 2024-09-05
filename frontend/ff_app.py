@@ -512,7 +512,7 @@ if st.session_state["submitted"] and selected_city and selected_food_type:
         top_state_rest = top_state_rest.iloc[:10]
 
     # Rename the index to "Cuisine type"
-    top_state_rest.index.name = 'Cuisine type'
+    top_state_rest.index.name = 'Food type'
 
     # Plot the stacked bar chart with no black background
     st.markdown("<br><br>", unsafe_allow_html=True)
