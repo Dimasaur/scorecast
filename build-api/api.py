@@ -11,7 +11,7 @@ with open(os.path.join(os.path.dirname(__file__),  "scorecast_xgboost.pkl"), "rb
     model = pickle.load(f)
 
 
-# Input data schema
+# Data schema for model input
 class PredictionInput(BaseModel):
     features: List[float]
 
