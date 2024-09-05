@@ -527,7 +527,55 @@ if st.session_state["submitted"] and selected_city and selected_food_type:
     )
     st.plotly_chart(fig_bar, use_container_width=True)
 
-    # Add a button to download the page as a PDF using JavaScript
+
+        # ###################################################
+    # AVG REVIEW SCORE FOR TOP-5 MOST POP FOOD TYPES
+    # ###################################################
+
+    top_5_food_type = list(df_restaurants.food_type_one.value_counts()[:5].index)
+    top_5_food_types_scores = df_restaurants.groupby('food_type_one')['stars'].mean().reset_index()[:5].round(1)
+
+    # Create a bar chart using Plotly with matching formatting
+    fig = px.bar(
+        top_5_food_types_scores,
+        x='food_type_one',
+        y='stars',
+        title='Average Review Score for Top-5 Most Popular Food Types',
+        labels={'food_type_one': 'Food Type', 'stars': 'Average Review Score'},
+        color_discrete_sequence=['#1f3864', '#58bc8b', '#e67c73', '#fac769'],  # Matching color scheme
+        height=700  # Increased height to match
+    )
+
+    # Update the chart layout and style to match the first chart
+    fig.update_traces(
+        texttemplate='%{y:.1f}',  # Text format to show 1 decimal place
+        textposition='outside',  # Place the text outside the bars
+        textfont=dict(size=20, color='#1f3864')  # Font size and color for text
+    )
+    fig.update_layout(
+        title_font_size=24,  # Title font size
+        title_x=0.0,  # Align title to the left
+        paper_bgcolor='#f9f9f9',  # Background color of the chart area
+        plot_bgcolor='#f9f9f9',  # Background color of the plot area
+        title_font_color='#1f3864',  # Title font color
+        xaxis=dict(
+            showgrid=False,  # Hide gridlines on the x-axis
+            tickfont=dict(size=20, color='#1f3864')  # Font size and color for x-axis labels
+        ),
+        yaxis=dict(
+            showgrid=False,  # Hide gridlines on the y-axis
+            title='Average Review Score',  # Y-axis title
+            tickfont=dict(size=20, color='#1f3864')  # Font size and color for y-axis labels
+        ),
+        uniformtext_minsize=12,  # Minimum font size for uniform text
+        uniformtext_mode='hide',  # Hide text if it doesn't fit
+        showlegend=False  # Hide the legend
+    )
+
+    # Display the formatted chart in Streamlit
+    st.plotly_chart(fig, use_container_width=True)
+
+        # Add a button to download the page as a PDF using JavaScript
     pdf_button_html = """
     <a href="javascript:window.print()" target="_blank" style="text-decoration:none;">
         <div class="stButton red-button">
@@ -541,44 +589,34 @@ if st.session_state["submitted"] and selected_city and selected_food_type:
     #  # AVG REVIEW SCORE FOR SELECTED CITY
     # ###################################################
 
+    # average review of by city
 
-# average review of by city
+    restaurants_eda_df_full = pd.read_csv("frontend/restaurant_eda_df_full.csv", low_memory=False)
+    df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
+    selected_city_df = restaurants_eda_df_full[restaurants_eda_df_full.city.astype(str).str.upper() == selected_city]
+    avg_review_city = round(selected_city_df.stars.mean(),2)
 
-restaurants_eda_df_full = pd.read_csv("frontend/restaurant_eda_df_full.csv", low_memory=False)
-df_restaurants = pd.read_csv("frontend/restaurants_ohe.csv")
-selected_city_df = restaurants_eda_df_full[restaurants_eda_df_full.city.astype(str).str.upper() == selected_city]
-avg_review_city = round(selected_city_df.stars.mean(),2)
+    # average review of by city + by food type
 
-# average review of by city + by food type
+    avg_review_city_food = round(df_restaurants[
+                            (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
+                            (df_restaurants.food_type_one == selected_food_type)
+                        ].stars.mean(),2)
 
-avg_review_city_food = round(df_restaurants[
-                        (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
-                        (df_restaurants.food_type_one == selected_food_type)
-                    ].stars.mean(),2)
-
-    # ###################################################
-    # TOT REST IN THE CITY AND % OF THE SELECTED FOOD TYPE
-    # ###################################################
-
-
-# total restaurants in the city
-total_rest_sel_city = len(selected_city_df)
-
-# total % of restaurants of the selected cuisine in the city
-sel_cuisine_rest = df_restaurants[
-            (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
-            (df_restaurants.food_type_one == selected_food_type)]
-
-if len(selected_city_df) == 0:
-    sel_cuisine_percent = 0
-else:
-    sel_cuisine_percent = round(len(sel_cuisine_rest) / len(selected_city_df) * 100,2)
+        # ###################################################
+        # TOT REST IN THE CITY AND % OF THE SELECTED FOOD TYPE
+        # ###################################################
 
 
-    # ###################################################
-    # AVG REVIEW SCORE FOR TOP-5 MOST POP FOOD TYPES
-    # ###################################################
+    # total restaurants in the city
+    total_rest_sel_city = len(selected_city_df)
 
-top_5_food_type = list(df_restaurants.food_type_one.value_counts()[:5].index)
-top_5_food_types_scores = df_restaurants.groupby('food_type_one')['stars'].mean().reset_index()[:5].round(1)
-top_5_food_types_scores
+    # total % of restaurants of the selected cuisine in the city
+    sel_cuisine_rest = df_restaurants[
+                (df_restaurants.city.astype(str).str.upper() == selected_city.upper()) & \
+                (df_restaurants.food_type_one == selected_food_type)]
+
+    if len(selected_city_df) == 0:
+        sel_cuisine_percent = 0
+    else:
+        sel_cuisine_percent = round(len(sel_cuisine_rest) / len(selected_city_df) * 100,2)
