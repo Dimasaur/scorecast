@@ -534,6 +534,7 @@ if st.session_state["submitted"] and selected_city and selected_food_type:
 
     top_5_food_type = list(df_restaurants.food_type_one.value_counts()[:5].index)
     top_5_food_types_scores = df_restaurants.groupby('food_type_one')['stars'].mean().reset_index()[:5].round(1)
+    top_5_food_types_scores = top_5_food_types_scores.sort_values(by="stars", ascending=False)
 
     # Create a bar chart using Plotly with matching formatting
     fig = px.bar(
