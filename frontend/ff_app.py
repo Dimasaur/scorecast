@@ -1,4 +1,79 @@
-import streamlit as st
+predicted_scores = {
+        'ALBERTA': {
+            'NW EDMONTON': {'Italian': 70, 'Mexican': 80, 'Chinese': 75},
+            'EAST EDMONTON': {'Italian': 65, 'Mexican': 78, 'Chinese': 72},
+            'EDMONTON': {'Italian': 85, 'Mexican': 88, 'Chinese': 79},
+            'SHERWOOD': {'Italian': 67, 'Mexican': 80, 'Chinese': 70},
+            'BEAUMONT': {'Italian': 68, 'Mexican': 82, 'Chinese': 71},
+            'SAINT ALBERT': {'Italian': 72, 'Mexican': 85, 'Chinese': 76},
+        },
+        'ARIZONA': {
+            'GREEN VALLEY': {'Italian': 72, 'Mexican': 90, 'Chinese': 78},
+            'TUCSON': {'Italian': 80, 'Mexican': 93, 'Chinese': 85},
+            'ORO VALLEY': {'Italian': 74, 'Mexican': 88, 'Chinese': 79},
+        },
+        'CALIFORNIA': {
+            'SANTA BARBARA': {'Italian': 83, 'Mexican': 92, 'Chinese': 84},
+            'GOLETA': {'Italian': 78, 'Mexican': 90, 'Chinese': 80},
+            'TRUCKEE': {'Italian': 70, 'Mexican': 87, 'Chinese': 74},
+        },
+        'DELAWARE': {
+            'WILMINGTON': {'Italian': 60, 'Mexican': 85, 'Chinese': 74},
+            'NEWARK': {'Italian': 65, 'Mexican': 78, 'Chinese': 72},
+            'TROLLEY SQUARE': {'Italian': 63, 'Mexican': 77, 'Chinese': 70},
+        },
+        'FLORIDA': {
+            'TAMPA': {'Italian': 82, 'Mexican': 89, 'Chinese': 78},
+            'ST PETERSBURG': {'Italian': 85, 'Mexican': 92, 'Chinese': 80},
+            'CLEARWATER': {'Italian': 80, 'Mexican': 88, 'Chinese': 76},
+        },
+        'IDAHO': {
+            'BOISE': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'NAMPA': {'Italian': 70, 'Mexican': 85, 'Chinese': 76},
+            'MERIDIAN': {'Italian': 73, 'Mexican': 86, 'Chinese': 78},
+        },
+        'ILLINOIS': {
+            'EAST ST LOUIS': {'Italian': 62, 'Mexican': 75, 'Chinese': 70},
+            'BELLEVILLE': {'Italian': 66, 'Mexican': 78, 'Chinese': 72},
+            'GRANITE CITY': {'Italian': 68, 'Mexican': 80, 'Chinese': 74},
+        },
+        'INDIANA': {
+            'INDIANAPOLIS': {'Italian': 78, 'Mexican': 88, 'Chinese': 80},
+            'NOBLESVILLE': {'Italian': 74, 'Mexican': 85, 'Chinese': 78},
+            'FISHERS': {'Italian': 76, 'Mexican': 87, 'Chinese': 80},
+        },
+        'LOUISIANA': {
+            'NEW ORLEANS': {'Italian': 80, 'Mexican': 92, 'Chinese': 85},
+            'METAIRIE': {'Italian': 78, 'Mexican': 90, 'Chinese': 82},
+            'KENNER': {'Italian': 76, 'Mexican': 88, 'Chinese': 80},
+        },
+        'MISSOURI': {
+            'ST LOUIS': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'CHESTERFIELD': {'Italian': 72, 'Mexican': 86, 'Chinese': 78},
+            'CLAYTON': {'Italian': 73, 'Mexican': 87, 'Chinese': 79},
+        },
+        'NEW JERSEY': {
+            'TRENTON': {'Italian': 68, 'Mexican': 82, 'Chinese': 74},
+            'CHERRY HILL': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'MOUNT LAUREL': {'Italian': 73, 'Mexican': 87, 'Chinese': 79},
+        },
+        'NEVADA': {
+            'RENO': {'Italian': 78, 'Mexican': 90, 'Chinese': 85},
+            'SPARKS': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'VERDI': {'Italian': 70, 'Mexican': 85, 'Chinese': 78},
+        },
+        'PENNSYLVANIA': {
+            'PHILADELPHIA': {'Italian': 82, 'Mexican': 90, 'Chinese': 85},
+            'NORRISTOWN': {'Italian': 76, 'Mexican': 88, 'Chinese': 80},
+            'WEST CHESTER': {'Italian': 74, 'Mexican': 86, 'Chinese': 79},
+        },
+        'TENNESSEE': {
+            'NASHVILLE': {'Italian': 84, 'Mexican': 92, 'Chinese': 85},
+            'FRANKLIN': {'Italian': 80, 'Mexican': 90, 'Chinese': 82},
+            'CLARKSVILLE': {'Italian': 78, 'Mexican': 88, 'Chinese': 80},
+
+        }
+    }import streamlit as st
 import pandas as pd
 import json
 import time
@@ -305,19 +380,83 @@ if st.session_state["submitted"] and selected_city and selected_food_type:
     """, unsafe_allow_html=True)
 
     # ###################################################
-    # PREDICTED SCORE
+    # PREDICTED SCORE (for demo purpose)
     # ###################################################
 
-
-    # Define a nested dictionary with predefined predicted scores
     predicted_scores = {
+        'ALBERTA': {
+            'NW EDMONTON': {'Italian': 70, 'Mexican': 80, 'Chinese': 75},
+            'EAST EDMONTON': {'Italian': 65, 'Mexican': 78, 'Chinese': 72},
+            'EDMONTON': {'Italian': 85, 'Mexican': 88, 'Chinese': 79},
+            'SHERWOOD': {'Italian': 67, 'Mexican': 80, 'Chinese': 70},
+            'BEAUMONT': {'Italian': 68, 'Mexican': 82, 'Chinese': 71},
+            'SAINT ALBERT': {'Italian': 72, 'Mexican': 85, 'Chinese': 76},
+        },
+        'ARIZONA': {
+            'GREEN VALLEY': {'Italian': 72, 'Mexican': 90, 'Chinese': 78},
+            'TUCSON': {'Italian': 80, 'Mexican': 93, 'Chinese': 85},
+            'ORO VALLEY': {'Italian': 74, 'Mexican': 88, 'Chinese': 79},
+        },
         'CALIFORNIA': {
-            'Italian': 63,
-            'Mexican': 90
+            'SANTA BARBARA': {'Italian': 83, 'Mexican': 92, 'Chinese': 84},
+            'GOLETA': {'Italian': 78, 'Mexican': 90, 'Chinese': 80},
+            'TRUCKEE': {'Italian': 70, 'Mexican': 87, 'Chinese': 74},
         },
         'DELAWARE': {
-            'Italian': 43,
-            'Mexican': 75
+            'WILMINGTON': {'Italian': 60, 'Mexican': 85, 'Chinese': 74},
+            'NEWARK': {'Italian': 65, 'Mexican': 78, 'Chinese': 72},
+            'TROLLEY SQUARE': {'Italian': 63, 'Mexican': 77, 'Chinese': 70},
+        },
+        'FLORIDA': {
+            'TAMPA': {'Italian': 82, 'Mexican': 89, 'Chinese': 78},
+            'ST PETERSBURG': {'Italian': 85, 'Mexican': 92, 'Chinese': 80},
+            'CLEARWATER': {'Italian': 80, 'Mexican': 88, 'Chinese': 76},
+        },
+        'IDAHO': {
+            'BOISE': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'NAMPA': {'Italian': 70, 'Mexican': 85, 'Chinese': 76},
+            'MERIDIAN': {'Italian': 73, 'Mexican': 86, 'Chinese': 78},
+        },
+        'ILLINOIS': {
+            'EAST ST LOUIS': {'Italian': 62, 'Mexican': 75, 'Chinese': 70},
+            'BELLEVILLE': {'Italian': 66, 'Mexican': 78, 'Chinese': 72},
+            'GRANITE CITY': {'Italian': 68, 'Mexican': 80, 'Chinese': 74},
+        },
+        'INDIANA': {
+            'INDIANAPOLIS': {'Italian': 78, 'Mexican': 88, 'Chinese': 80},
+            'NOBLESVILLE': {'Italian': 74, 'Mexican': 85, 'Chinese': 78},
+            'FISHERS': {'Italian': 76, 'Mexican': 87, 'Chinese': 80},
+        },
+        'LOUISIANA': {
+            'NEW ORLEANS': {'Italian': 80, 'Mexican': 92, 'Chinese': 85},
+            'METAIRIE': {'Italian': 78, 'Mexican': 90, 'Chinese': 82},
+            'KENNER': {'Italian': 76, 'Mexican': 88, 'Chinese': 80},
+        },
+        'MISSOURI': {
+            'ST LOUIS': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'CHESTERFIELD': {'Italian': 72, 'Mexican': 86, 'Chinese': 78},
+            'CLAYTON': {'Italian': 73, 'Mexican': 87, 'Chinese': 79},
+        },
+        'NEW JERSEY': {
+            'TRENTON': {'Italian': 68, 'Mexican': 82, 'Chinese': 74},
+            'CHERRY HILL': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'MOUNT LAUREL': {'Italian': 73, 'Mexican': 87, 'Chinese': 79},
+        },
+        'NEVADA': {
+            'RENO': {'Italian': 78, 'Mexican': 90, 'Chinese': 85},
+            'SPARKS': {'Italian': 75, 'Mexican': 88, 'Chinese': 80},
+            'VERDI': {'Italian': 70, 'Mexican': 85, 'Chinese': 78},
+        },
+        'PENNSYLVANIA': {
+            'PHILADELPHIA': {'Italian': 82, 'Mexican': 90, 'Chinese': 85},
+            'NORRISTOWN': {'Italian': 76, 'Mexican': 88, 'Chinese': 80},
+            'WEST CHESTER': {'Italian': 74, 'Mexican': 86, 'Chinese': 79},
+        },
+        'TENNESSEE': {
+            'NASHVILLE': {'Italian': 84, 'Mexican': 92, 'Chinese': 85},
+            'FRANKLIN': {'Italian': 80, 'Mexican': 90, 'Chinese': 82},
+            'CLARKSVILLE': {'Italian': 78, 'Mexican': 88, 'Chinese': 80},
+
         }
     }
 
